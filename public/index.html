@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Standard Meta -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css" />
+    <link href="styles.css" rel="stylesheet" type="text/css" />
+    <title>473 Project 2</title>
+    <!--Scripts for jquery and semantic-->
+    <script src="http://knockoutjs.com/downloads/knockout-latest.js"></script>
+</head>
+
+<body style="background-image: url('./background.png'); background-repeat: no-repeat; background-size:contain;">
+
+  <button id="stopMusic">MUTE</button>
+  <nav style="float:left; background-color:#4D88C2;">
+  <p><h2 class="ui center aligned image header" style="color:#F9FF7F">Users Online</h2></p>
+      <ul id="users"></ul>
+</nav>
+  <div id="login">
+    <div class="ui middle aligned grid">
+      <div class="column">
+        <!--Header-->
+        <h2 class="ui red center aligned header">
+        </h2>
+        <!--Form to fill out username and submit-->
+        <form class="ui large form">
+          <div class="ui stacked segment">
+            <div class="field">
+              <div class="ui left icon input">
+                <i class="user icon"></i>
+                <!--Where username is entered-->
+                <input id="username" type="text" name="username" placeholder="Example: RJSkywalker">
+              </div>
+            </div>
+          </div>
+          <!--Create the user and enter the game-->
+          <!--<input id="createUser" type="image" src="come-on-down.png" style="height:15%; width:100%;"/>-->
+          <div id="createUser" class="ui fluid large red submit button">Enter the game</div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <!--GAME PAGE-->
+<div class="game">
+
+    <!--Welcome message
+        This div is to be shown when user loads the page-->
+    <div class="ui centered grid" id="welcomeMessage" style="display:none">
+      <h1 style="position:fixed; top:5%; font-family:Times New Roman; font-size:4em; text-shadow:1px 1px yellow;">Welcome to The Price is Right!</h1>
+    </div>
+
+    <!--"Come on down" text-->
+    <div class="ui centered grid" id="comeOnDown">
+        <img src="come-on-down.png" style="position:fixed; height:15%; top:5%;"></img>
+    </div>
+
+    <!--Tournament Round Banner-->
+    <div style="display:none;"></div>
+
+    <!--Container for 3 items: List of winners, current image, submission form-->
+    <div id="gameplay" class="ui grid" style="position:fixed; margin-left:60px; margin-top:150px; width:100%; height:550px;">
+
+      <!--List of current winners-->
+      <div id="winnersCircle" class="four wide column">
+        <div class="ui centered grid">
+          <h1 style="text-align:center; color:orange; font-family:Comic Sans MS, cursive, sans-serif">Winner's Circle</h1>
+          <div style="line-height:30px; font-size:1.5em;background-color:white; border-radius:50%; height:200px; width:200px;">
+            <!-- <p> was in there so I could get the proper spacing that I wanted.
+                Data bindings are on the <p> tags so we an update the winner's
+                circle as people win rounds-->
+            <p style="padding-bottom:10px;"></p>
+            <p> </p>
+            <p> </p>
+            <p> </p>
+          </div>
+        </div>
+      </div>
+
+      <!--During regular game: image of what to bid on
+          During tournament round: spinning wheel-->
+      <div class="eight wide column" style="background-color:black;">
+        <div class="ui centered grid">
+          <!--Image to bid on-->
+          <img id="currentImage" data-bind="attr : {src: imagePath}" ></img>
+          <!--Spin Wheel-->
+          <div id="canvas" style="display:none">
+            <canvas width="400" height="400">
+              <p style="{color: white}" align="center">Sorry, your browser doesn't support canvas. Please try another.</p>
+            </canvas>
+          </div>
+        </div>
+      </div>
+
+      <!--During regular game: User input and submission
+          During tournament round: User score-->
+      <div class="four wide column">
+        <div id="roundBid">
+          <h1 style="text-align:center; color:orange; font-family:Comic Sans MS, cursive, sans-serif">Your Bid</h1>
+          <form class="ui form" style="margin-top:10%;">
+            <div class="ui stacked segment">
+              <div class="field">
+                <div class="ui left icon input">
+                  <i class="dollar icon"></i>
+                  <!--User bid-->
+                  <input id="bid" type="text" name="Guess" placeholder="Example: 249.99">
+                </div>
+              </div>
+            </div>
+            <div class="ui stacked segment">
+              <!--User submits bid-->
+              <div id="inputBid" class="ui fluid medium green submit button">Submit</div>
+            </div>
+          </form>
+        </div>
+
+        <!--Results of spin wheel-->
+        <div class="ui centered grid" id="tournamentPoints" style="display:none">
+          <div class="ui stacked segment" style="margin-top:20px;">
+            <h2>Points</h2>
+            <div class="ui disabled input">
+              <input type="text" placeholder="Points..." >
+            </div>
+          </div>
+          <div class="ui stacked segment">
+            <h3>Total</h3>
+            <div class="ui disabled input">
+              <input type="text" placeholder="Total..." >
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!--Game play will consist of players placing bids that will show up here
+        Each segment has an h2 and span elements that have data bindings-->
+    <div id="biddingBoard" class="ui horizontal segments" style="position:absolute; width:100%; top:90%;">
+      <!--Player1-->
+      <div class="ui center aligned segment" style="border:2px solid blue;">
+        <!--Segment contains the name of player 1 and the price they are bidding-->
+        <h2 id="p1" style="color:blue;" >Player1</h2>
+        <span id="p1-bid" style="padding:2px; border:1px solid blue;" >$0.00</span>
+      </div>
+      <!--Player2-->
+      <div class="ui center aligned segment" style="margin-left:2px; border:2px solid red;">
+        <!--Segment contains the name of player 2 and the price they are bidding-->
+        <h2 id="p2" style="color:red;" >Player2</h2>
+        <span id="p2-bid" style="padding:2px; border:1px solid red;" >$0.00</span>
+      </div>
+      <!--Player3-->
+      <div class="ui center aligned segment" style="margin-left:2px; border:2px solid green;">
+        <!--Segment contains the name of player 3 and the price they are bidding-->
+        <h2 id="p3" style="color:green;" >Player3</h2>
+        <span id="p3-bid" style="padding:2px; border:1px solid green;" >$0.00</span>
+      </div>
+      <!--Player4-->
+      <div class="ui center aligned segment" style="margin-left:2px; border:2px solid orange;">
+        <!--Segment contains the name of player 4 and the price they are bidding-->
+        <h2 id="p4" style="color:orange;" >Player4</h2>
+        <span id="p4-bid" style="padding:2px; border:1px solid orange;" >$0.00</span>
+      </div>
+      <!--Player5-->
+      <div class="ui center aligned segment" style="margin-left:2px; border:2px solid purple;">
+        <!--Segment contains the name of player 5 and the price they are bidding-->
+        <h2 id="p5" style="color:purple;" >Player5</h2>
+        <span id="p5-bid" style="padding:2px; border:1px solid purple;">$0.00</span>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+
+<footer>
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script src="semantic/dist/semantic.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.4/semantic.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.4/semantic.min.js"></script>
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+</footer>
+</html>

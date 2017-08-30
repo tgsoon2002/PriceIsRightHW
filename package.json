@@ -1,0 +1,29 @@
+{
+  "name": "assignment5",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jcruz1991/Assignment5.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jcruz1991/Assignment5/issues"
+  },
+  "homepage": "https://github.com/jcruz1991/Assignment5#readme",
+  "description": "",
+  "dependencies": {
+    "bluebird": "^3.4.6",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "fs": "0.0.1-security",
+    "mongoose": "^4.6.6",
+    "play-sound": "^1.1.1",
+    "redis": "^2.6.3",
+    "socket.io": "^1.5.1"
+  }
+}
